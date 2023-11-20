@@ -110,6 +110,7 @@ def reverse_f_string(s, fstring_pattern, var_types, scope=None):
 
 app = Flask(__name__)
 
+print(os.getcwd()) 
 parser = argparse.ArgumentParser(description='Flask app serving images from a directory')
 parser.add_argument('--image_directory', type=str, help='Path to the image directory', required=True)
 parser.add_argument('--image_path_patterns', nargs='+', help='Patterns for identifying images to show', type=str)
@@ -157,7 +158,7 @@ def serve_image(filename):
     return send_from_directory(args.image_directory, filename)
 
 def main() : 
-    app.run(debug=True, port=args.port, host=host)
+    app.run(debug=True, port=args.port, host=args.host)
 
 if __name__ == '__main__':
     main()

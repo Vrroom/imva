@@ -31,10 +31,13 @@ imva --image_directory PATH_TO_IMAGE_DIRECTORY --image_path_patterns IMAGE_PATH_
 To launch the server with a specified directory and patterns:
 
 ```bash
-python3 -m imva --image_directory ./image_log_dir \
+cd image_log_dir
+python3 -m imva --image_directory `pwd` \
                 --image_path_patterns samples_gs-{global_step}_e-{epoch}_b-{batch}.png \
                                       reconstruction_gs-{global_step}_e-{epoch}_b-{batch}.png \
-                --sort_key global_step
+                --sort_key global_step \
+                --host 0.0.0.0 \
+                --port 7861 \
 ```
 
 In the above example, `image_log_dir` has a bunch of images which follow the template in `image_path_patterns`. These are sorted by the `global_step` key in decreasing order and visualized in an HTML table.
