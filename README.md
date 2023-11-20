@@ -42,7 +42,9 @@ python3 -m imva --image_directory `pwd` \
                 --port 7861 \
 ```
 
-In the above example, `image_log_dir` has a bunch of images which follow the template in `image_path_patterns`. These are sorted by the `global_step` key in decreasing order and visualized in an HTML table.
+In the above example, `image_log_dir` has a bunch of images which follow the template in `image_path_patterns`. These are sorted by the `global_step` key in decreasing order and visualized in an HTML table. 
+
+<img src="https://github.com/Vrroom/imva/assets/7254326/50649dc6-56e3-41b7-821d-eb215e62dba6" alt="Image Description" width="400"/>
 
 ## License
 
