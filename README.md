@@ -7,7 +7,9 @@ imva serves images from a specified directory, displaying them in a table format
 You can install `imva` directly from GitHub using `pip`. Run the following command:
 
 ```bash
-pip install git+https://github.com/vrroom/imva.git
+git clone https://github.com/vrroom/imva.git
+cd imva
+python3 -m pip install -e .
 ```
 
 ## Usage
@@ -15,7 +17,7 @@ pip install git+https://github.com/vrroom/imva.git
 After installation, run `imva` using the following command with the required arguments:
 
 ```bash
-imva --image_directory PATH_TO_IMAGE_DIRECTORY --image_path_patterns IMAGE_PATH_PATTERNS --sort_key SORT_KEY
+python3 -m imva --image_directory PATH_TO_IMAGE_DIRECTORY --image_path_patterns IMAGE_PATH_PATTERNS --sort_key SORT_KEY
 ```
 
 ### Arguments
