@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Table</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="table-responsive">
+            <table class="table" id="imageTable">
+                <tr>
+                    {% for header in col_headers %}
+                        <th>{{ header }}</th>
+                    {% endfor %}
+                </tr>
+                <!-- More rows will be added here -->
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let i = 0; 
+        $(window).scroll(function() {
+            if ($(window).scrollTop() + $(window).height() >= $(document).height() - 10) {
+                loadMoreImages(i);
+                i += 1;
+            }
+        });
+
+        function loadMoreImages(rowId) {
+            $.getJSON('/load_more_images', { row_id: rowId }, function(row) {
+                if (row.length !== 0) {
+                    var newRow = '<tr id="row-' + rowId + '">';
+                    newRow += '<td>' + row[0] + '</td>';
+                    for (let i = 1; i < row.length; i++) {
+                        newRow += '<td><img src="' + row[i] + '" alt="image" class="img-fluid"></td>';
+                    }
+                    newRow += '</tr>';
+                    $('#imageTable').append(newRow);
+                }
+            });
+        }
+
+        for (; i < 5; i++) {
+            loadMoreImages(i);
+        }
+
+    </script>
+</body>
+</html>
+
