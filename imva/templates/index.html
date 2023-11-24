@@ -21,18 +21,15 @@
     </div>
 
     <script>
-        let i = 0; 
-        $(window).scroll(function() {
-            if ($(window).scrollTop() + $(window).height() >= $(document).height() - 10) {
-                loadMoreImages(i);
-                i += 1;
-            }
-        });
-
-        function loadMoreImages(rowId) {
-            $.getJSON('/load_more_images', { row_id: rowId }, function(row) {
+        async function loadMoreImages(rowId) {
+            try {
+                let response = await fetch('/load_more_images?row_id=' + rowId);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                let row = await response.json();
                 if (row.length !== 0) {
-                    var newRow = '<tr id="row-' + rowId + '">';
+                    let newRow = '<tr id="row-' + rowId + '">';
                     newRow += '<td>' + row[0] + '</td>';
                     for (let i = 1; i < row.length; i++) {
                         newRow += '<td><img src="' + row[i] + '" alt="image" class="img-fluid"></td>';
@@ -40,12 +37,26 @@
                     newRow += '</tr>';
                     $('#imageTable').append(newRow);
                 }
-            });
+            } catch (error) {
+                console.error('Error fetching image row:', error);
+            }
         }
-
-        for (; i < 5; i++) {
-            loadMoreImages(i);
+        
+        async function loadInitialImages() {
+            for (let i = 0; i < 5; i++) {
+                await loadMoreImages(i);
+            }
         }
+        
+        $(window).scroll(async function() {
+            if ($(window).scrollTop() + $(window).height() >= $(document).height() - 10) {
+                await loadMoreImages(i);
+                i++;
+            }
+        });
+        
+        let i = 0;
+        loadInitialImages();
 
     </script>
 </body>
