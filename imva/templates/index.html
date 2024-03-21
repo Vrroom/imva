@@ -35,10 +35,16 @@
                 }
                 const row = await response.json();
                 if (row.length > 0) {
-                    const newRow = row.reduce((acc, cell, idx) => 
-                        acc + `<td>${idx ? `<img src="${cell}" alt="image" class="img-fluid">` : cell}</td>`, 
-                        `<tr id="row-${rowId}">`
-                    ) + '</tr>';
+                    const newRow = row.reduce((acc, cell, idx) => {
+                      if (idx === 0) {
+                        return acc + `<td>${cell}</td>`;
+                      } else {
+                        const vid_tag = `<video width="320" height="240" controls><source src="${cell.src}" type="video/mp4">Your browser does not support the video tag.</video>`;
+                        const img_tag = `<img src="${cell.src}" alt="image" class="img-fluid">`;
+                        const media_html = cell.video ? vid_tag : img_tag;
+                        return acc + `<td>${media_html}</td>`;
+                      }
+                    }, `<tr id="row-${rowId}">`) + '</tr>';
                     $('#imageTable').append(newRow);
                 }
             } catch (error) {

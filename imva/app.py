@@ -6,6 +6,14 @@ import random
 import argparse
 import re
 import threading
+import magic
+
+def is_video (full_path) : 
+    try:
+        file_type = magic.from_file(full_path, mime=True)
+        return file_type.startswith('video/')
+    except:
+        return False
 
 def extract_braced_parts(s):
     # Regular expression to find parts enclosed in braces
@@ -25,7 +33,10 @@ def prepare_images (args):
         path_params = []
         for path in image_paths :
             try :
-                path_params.append((path, reverse_f_string(path, path_pattern, int)))
+                try:  
+                    path_params.append((path, reverse_f_string(path, path_pattern, int)))
+                except Exception :
+                    path_params.append((path, reverse_f_string(path, path_pattern, str)))
             except Exception as e: 
                 pass
         if args.sort_key is not None :
@@ -87,7 +98,7 @@ def reverse_f_string(s, fstring_pattern, var_types, scope=None):
     # Match against the string
     match = re.match(regex_pattern, s)
     if not match:
-        raise ValueError("No match found")
+        raise ValueError(f'No match found - string {s}, pattern {regex_pattern}')
 
     # Ensure each variable name has exactly one match
     if len(match.groups()) != len(var_names):
@@ -149,7 +160,7 @@ def load_more_images():
             params = ['\n'.join(f'{k}:{v}' for k, v in row_groups[0][idx][1].items())]
             images = [group[idx][0] for group in row_groups]
             image_urls = [url_for('serve_image', filename=image) for image in images]
-            return jsonify(params + image_urls)
+            return jsonify(params + [dict(src=a, video=is_video(b)) for a, b in zip(image_urls, images)])
         except IndexError :
             return jsonify([])
 
