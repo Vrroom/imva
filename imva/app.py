@@ -40,7 +40,11 @@ def prepare_images (args):
             except Exception as e: 
                 pass
         if args.sort_key is not None :
-            path_params = list(reversed(sorted(path_params, key=lambda x: x[1][args.sort_key])))
+            def comparator (x) :
+                rest_keys = list(set(x[1].keys()) - {args.sort_key})
+                rest_vals = [x[1][k] for k in rest_keys]
+                return [x[1][args.sort_key]] + rest_vals
+            path_params = list(reversed(sorted(path_params, key=comparator))) #key=lambda x: (x[1][args.sort_key])))
         row_groups.append(path_params)
     return [''] + col_headers, row_groups
 
